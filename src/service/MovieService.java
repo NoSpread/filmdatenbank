@@ -35,5 +35,35 @@ public class MovieService {
         return new Movie();
     }
 
+    public void addMovie(Movie movie) {
+        for (Movie inListMovie : movies) {
+            if (inListMovie.getId() != movie.getId()) {
+                this.movies.add(movie);
+            } else {
+                System.out.println("Duplicate entry for id " + movie.getId());
+            }
+        }
+    }
+
+    public void addActor(Actor actor) {
+        for (Actor inListActors : actors) {
+            if (inListActors.getId() != actor.getId()) {
+                this.actors.add(actor);
+            } else {
+                System.out.println("Duplicate entry for id " + actor.getId());
+            }
+        }
+    }
+
+    public void addDirector(Director director) {
+        for (Director inListDirectors : directors) {
+            if (inListDirectors.getId() != director.getId()) {
+                this.directors.add(director);
+            } else {
+                System.out.println("Duplicate entry for id " + director.getId());
+            }
+        }
+    }
+
 
 }
