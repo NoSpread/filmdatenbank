@@ -70,8 +70,7 @@ public class ReaderService {
             String[] l = data.split("\",\"");
             String name = l[1].replace("\"", "").replaceAll("^\\s", "");
             int id = Integer.parseInt(l[0].replace("\"", ""));
-            Actor actor = new Actor().setId(id).setName(name);
-            this.movieService.addActor(actor);
+            this.movieService.addActor(new Actor().setId(id).setName(name));
         }
     }
 

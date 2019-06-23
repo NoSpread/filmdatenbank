@@ -27,12 +27,24 @@ public class MovieService {
     - getActor by Name (first + last)
      */
 
-    public Movie getMovieById(String id) {
-        return new Movie();
+    public Movie getMovieById(int id) {
+        for (Movie inListMovie : this.movies) {
+            if (inListMovie.getId() == id) {
+                return inListMovie;
+            }
+        }
+        // no movie found
+        return null;
     }
 
     public Movie getMovieByTitle(String title) {
-        return new Movie();
+        for (Movie inListMovie : this.movies) {
+            if (inListMovie.getTitle().equals(title)) {
+                return inListMovie;
+            }
+        }
+        // no movie found
+        return null;
     }
 
     public void addMovie(Movie movie) {
