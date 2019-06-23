@@ -35,5 +35,15 @@ public class MovieService {
         return new Movie();
     }
 
+    public void addMovie(Movie movie) {
+        for (Movie inListMovie : movies) {
+            if (inListMovie.getId() != movie.getId()) {
+                this.movies.add(movie);
+            } else {
+                System.out.println("Duplicate entry for id " + movie.getId());
+            }
+        }
+    }
+
 
 }

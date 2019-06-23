@@ -1,5 +1,7 @@
 package service;
 
+import model.Movie;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,6 +13,11 @@ import java.util.Map;
 import static utility.StopCodes.*;
 
 public class ReaderService {
+    private MovieService movieService;
+
+    public ReaderService(MovieService movieService) {
+        this.movieService = movieService;
+    }
 
     public void readFile() {
         try {
@@ -57,7 +64,8 @@ public class ReaderService {
     }
 
     private void parseActors(List<String> dataList) {
-
+        Movie movie = new Movie().setGenre();
+        this.movieService.addMovie(movie);
     }
 
     private void parseMovies(List<String> dataList) {
