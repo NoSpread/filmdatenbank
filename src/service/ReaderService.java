@@ -1,6 +1,7 @@
 package service;
 
 import model.Actor;
+import model.Director;
 import model.Movie;
 
 import java.awt.*;
@@ -87,7 +88,18 @@ public class ReaderService {
     }
 
     private void parseDirectorInMovie(List<String> dataList) {
-
+        for (String data : dataList) {
+            String[] splitComma = data.split(",");
+            if (splitComma.length == 2) {
+                int directorId = Integer.parseInt(splitComma[0].replace("\"", ""));
+                int movieId = Integer.parseInt(splitComma[1].replace("\"", ""));
+                if (directorId != 0 && movieId != 0) {
+                    Director directorById = this.movieService.getDirectorById(directorId);
+                    Movie movieById = this.movieService.getMovieById(movieId);
+                    directorById.getMovies().add(movieById.getId());
+                }
+            }
+        }
     }
 
     private boolean hasStopCode(String data) {

@@ -7,6 +7,7 @@ public class ControlService {
 
     public ControlService(String[] params, MovieService movieService) {
         this.movieService = movieService;
+        this.parseParams(params);
     }
 
     private void parseParams(String[] params) {
@@ -19,6 +20,8 @@ public class ControlService {
                     System.out.println(i + ". -> " + params[i]);
                 }
             }
+            // check params
+            this.checkParameter(params[0]);
         } else if (params.length == 1) {
             // check if the parameter is valid
             this.checkParameter(params[0]);
@@ -29,7 +32,7 @@ public class ControlService {
         }
     }
 
-    private String[] checkParameter(String param) {
+    private void checkParameter(String param) {
         // check the integrity of the parameter
         // it should look like this "--command=data"
         // data can either be a String or a integer
@@ -45,6 +48,7 @@ public class ControlService {
                     break;
                 case ACTORSEARCH: // expects a string as data
                     String data = this.checkForStringData(splitAtEquals[1], param);
+
                     // TODO : Pass data to the function
                     break;
                 case ACTORNETWORK: // expects a int as data
