@@ -4,14 +4,12 @@ import model.Actor;
 import model.Director;
 import model.Movie;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static utility.StopCodes.*;
 
@@ -32,7 +30,6 @@ public class ReaderService {
             System.out.println("File not found!");
         }
     }
-
 
     private void getData(BufferedReader bufferedReader) {
         Map<String, List<String>> dataSet = new HashMap<>();
@@ -68,15 +65,44 @@ public class ReaderService {
 
     private void parseActors(List<String> dataList) {
         for (String data : dataList) {
-            String[] l = data.split("\",\"");
-            String name = l[1].replace("\"", "").replaceAll("^\\s", "");
-            int id = Integer.parseInt(l[0].replace("\"", ""));
-            this.movieService.addActor(new Actor().setId(id).setName(name));
+            String[] splitComma = data.split("\",\"");
+            if (splitComma.length == 2) {
+                String name = splitComma[1].replace("\"", "").replaceAll("^\\s", "");
+                int id = Integer.parseInt(splitComma[0].replace("\"", ""));
+                this.movieService.addActor(new Actor().setId(id).setName(name));
+            }
         }
     }
 
     private void parseMovies(List<String> dataList) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        for (String data : dataList) {
+            String[] splitComma = data.split("\",\"");
+            if (splitComma.length == 7) {
+                int id = Integer.parseInt(splitComma[0].replace("\"", ""));
+                String title = splitComma[1].replace("\"", "");
+                String plot = splitComma[2].replace("\"", "");
+                String genre = splitComma[3].replace("\"", "");
+                Date release = null;
 
+                try {
+                    release = format.parse(splitComma[4].replace("\"", ""));
+                } catch (Exception e) { }
+
+                int imdbVotes = Integer.parseInt(splitComma[5].replace("\"", ""));
+                double imdbRating = Double.parseDouble(splitComma[6].replace("\"", ""));
+
+                // TODO ADD A FUNCTION TO LOOP AND REMOVE ALL COMMAS
+
+                System.out.println("id = " + id);
+                System.out.println("title = " + title);
+                System.out.println("plot = " + plot);
+                System.out.println("genre = " + genre);
+                System.out.println("release = " + release);
+                System.out.println("imdbVotes = " + imdbVotes);
+                System.out.println("imdbRating = " + imdbRating);
+            }
+        }
     }
 
     private void parseDirectors(List<String> dataList) {
