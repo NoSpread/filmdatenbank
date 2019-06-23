@@ -10,8 +10,9 @@ public class App {
     public App(String[] params) {
         this.movieService = new MovieService();
         this.readerService = new ReaderService(this.movieService);
-        this.controlService = new ControlService(params, this.movieService);
         this.readerService.readFile();
+
+        this.controlService = new ControlService(params, this.movieService);
 
         System.out.println("Passed params:");
         for (int i = 0; i < params.length; i++) {

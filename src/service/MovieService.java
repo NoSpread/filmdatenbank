@@ -12,6 +12,12 @@ public class MovieService {
     private List<Actor> actors;
     private List<Director> directors;
 
+    public MovieService() {
+        this.movies = new ArrayList<>();
+        this.actors = new ArrayList<>();
+        this.directors = new ArrayList<>();
+    }
+
     /*
     - getMovie by Id
     - getMovie by Title

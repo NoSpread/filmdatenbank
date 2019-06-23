@@ -80,13 +80,20 @@ public class ReaderService {
             String[] splitComma = data.split("\",\"");
             if (splitComma.length == 7) {
                 int id = Integer.parseInt(splitComma[0].replace("\"", ""));
-                String title = splitComma[1].replace("\"", "");
-                String plot = splitComma[2].replace("\"", "");
-                String genre = splitComma[3].replace("\"", "");
-                Date release = null;
+                for (int i = 0; i < 4; i++) {
+                    try {
+                        splitComma[i].replace("\"", "");
+                    } catch (Exception e) {
+
+                    }
+                }
+                String title = splitComma[1];
+                String plot = splitComma[2];
+                String genre = splitComma[3];
+                Date release = new Date();
 
                 try {
-                    release = format.parse(splitComma[4].replace("\"", ""));
+                    release = format.parse(splitComma[4]);
                 } catch (Exception e) { }
 
                 int imdbVotes = Integer.parseInt(splitComma[5].replace("\"", ""));
