@@ -1,7 +1,9 @@
 package service;
 
+import model.Actor;
 import model.Movie;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -21,7 +23,7 @@ public class ReaderService {
 
     public void readFile() {
         try {
-            File dbFile = new File("../data.db");
+            File dbFile = new File("data.db");
             BufferedReader read = new BufferedReader(new FileReader(dbFile));
             System.out.println("File successfully read!");
             this.getData(read);
@@ -53,19 +55,24 @@ public class ReaderService {
         }
         for (Map.Entry<String, List<String>> entry : dataSet.entrySet()) {
             switch (entry.getKey()) {
-                case ACTOR_STOP: this.parseActors(entry.getValue()); break;
-                case MOVIE_STOP: this.parseMovies(entry.getValue()); break;
-                case DIRECTOR_STOP: this.parseDirectors(entry.getValue()); break;
-                case DIRECTOR_MOVIE_STOP: this.parseDirectorInMovie(entry.getValue()); break;
-                case ACTOR_MOVIE_STOP: this.parseActorsInMovies(entry.getValue()); break;
+                case "New_Entity: " + ACTOR_STOP: this.parseActors(entry.getValue()); break;
+                case "New_Entity: " + MOVIE_STOP: this.parseMovies(entry.getValue()); break;
+                case "New_Entity: " + DIRECTOR_STOP: this.parseDirectors(entry.getValue()); break;
+                case "New_Entity: " + DIRECTOR_MOVIE_STOP: this.parseDirectorInMovie(entry.getValue()); break;
+                case "New_Entity: " + ACTOR_MOVIE_STOP: this.parseActorsInMovies(entry.getValue()); break;
                 default: return;
             }
         }
     }
 
     private void parseActors(List<String> dataList) {
-        Movie movie = new Movie().setGenre();
-        this.movieService.addMovie(movie);
+        for (String data : dataList) {
+            String[] l = data.split("\",\"");
+            String name = l[1].replace("\"", "").replaceAll("^\\s", "");
+            int id = Integer.parseInt(l[0].replace("\"", ""));
+            Actor actor = new Actor().setId(id).setName(name);
+            this.movieService.addActor(actor);
+        }
     }
 
     private void parseMovies(List<String> dataList) {
