@@ -1,8 +1,11 @@
 package model;
 
+import java.util.List;
+
 public class Actor {
     private int id;
     private String name;
+    private List<Integer> movies;
 
     // region Getter/Setter
     public int getId() {

@@ -1,8 +1,11 @@
 package model;
 
+import java.util.List;
+
 public class Director {
     private int id;
     private String name;
+    private List<Integer> movies;
 
     // region Getter/Setter
     public int getId() {
@@ -22,5 +25,15 @@ public class Director {
         this.name = name;
         return this;
     }
+
+    public List<Integer> getMovies() {
+        return movies;
+    }
+
+    public Director setMovies(List<Integer> movies) {
+        this.movies = movies;
+        return this;
+    }
+
     // endregion
 }

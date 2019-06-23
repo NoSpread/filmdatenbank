@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Movie {
     private int id;
@@ -10,6 +11,8 @@ public class Movie {
     private Date released;
     private int imdbVotes;
     private double imdbRating;
+    private List<Integer> actors;
+    private List<Integer> directors;
 
     //region Getter/Setter
     public int getId() {

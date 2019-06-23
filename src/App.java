@@ -11,15 +11,11 @@ public class App {
         this.movieService = new MovieService();
         this.readerService = new ReaderService(this.movieService);
         this.controlService = new ControlService(params, this.movieService);
+        this.readerService.readFile();
 
         System.out.println("Passed params:");
         for (int i = 0; i < params.length; i++) {
             System.out.println("Parameter " + i + ": " + params[i]);
         }
-        this.run();
-    }
-
-    private void run() {
-        this.readerService.readFile();
     }
 }

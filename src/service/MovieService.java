@@ -4,6 +4,7 @@ import model.Actor;
 import model.Movie;
 import model.Director;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieService {
@@ -37,13 +38,30 @@ public class MovieService {
         return null;
     }
 
-    public Movie getMovieByTitle(String title) {
+    void getMovieByTitle(String title) {
         for (Movie inListMovie : this.movies) {
-            if (inListMovie.getTitle().equals(title)) {
-                return inListMovie;
+            if (inListMovie.getTitle().toLowerCase().contains(title.toLowerCase())) {
+                System.out.println("TITLE => " + inListMovie.getTitle());
             }
         }
-        // no movie found
+    }
+
+    public List<Actor> getActorByName(String name) {
+        List<Actor> actorList = new ArrayList<>();
+        for (Actor actor : this.actors) {
+            if (actor.getName().toLowerCase().contains(name.toLowerCase())) {
+                actorList.add(actor);
+            }
+        }
+        return actorList;
+    }
+
+    public Director getDirectorById(int id) {
+        for (Director director : this.directors) {
+            if (director.getId() == id) {
+                return director;
+            }
+        }
         return null;
     }
 
