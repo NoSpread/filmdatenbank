@@ -6,6 +6,4 @@ public interface StopCodes {
     String DIRECTOR_STOP = "\"director_id\",\"director_name\"";
     String ACTOR_MOVIE_STOP = "\"actor_id\",\"movie_id\"";
     String DIRECTOR_MOVIE_STOP = "\"director_id\",\"movie_id\"";
-
-
 }

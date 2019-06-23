@@ -21,6 +21,9 @@ public class Actor {
         return name;
     }
 
+    public List<Integer> getMovies() {
+        return movies;
+    }
     public Actor setName(String name) {
         this.name = name;
         return this;

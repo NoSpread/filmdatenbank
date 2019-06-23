@@ -71,6 +71,16 @@ public class MovieService {
         return null;
     }
 
+    public Actor getActorById(int id) {
+        for (Actor actor : this.actors) {
+            if (actor.getId() != id) {
+                return actor;
+            }
+        }
+        return null;
+    }
+
+
     public void addMovie(Movie movie) {
         for (Movie inListMovie : movies) {
             if (inListMovie.getId() != movie.getId()) {

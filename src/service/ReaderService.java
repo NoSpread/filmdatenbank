@@ -65,7 +65,7 @@ public class ReaderService {
 
     private void parseActors(List<String> dataList) {
         for (String data : dataList) {
-            String[] splitComma = data.split("\",\"");
+            String[] splitComma = data.split(",");
             if (splitComma.length == 2) {
                 String name = splitComma[1].replace("\"", "").replaceAll("^\\s", "");
                 int id = Integer.parseInt(splitComma[0].replace("\"", ""));
@@ -80,9 +80,9 @@ public class ReaderService {
             String[] splitComma = data.split("\",\"");
             if (splitComma.length == 7) {
                 int id = Integer.parseInt(splitComma[0].replace("\"", ""));
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 7; i++) {
                     try {
-                        splitComma[i].replace("\"", "");
+                       splitComma[i] = splitComma[i].replace("\"", "");
                     } catch (Exception e) {
 
                     }
@@ -91,33 +91,48 @@ public class ReaderService {
                 String plot = splitComma[2];
                 String genre = splitComma[3];
                 Date release = new Date();
+                double imdbRating;
+                int imdbVotes;
 
+                Movie movie = new Movie();
                 try {
                     release = format.parse(splitComma[4]);
+                    imdbRating = Double.parseDouble(splitComma[6]);
+                    imdbVotes = Integer.parseInt(splitComma[5]);
+                    movie.setImdbRating(imdbRating).setImdbVotes(imdbVotes);
                 } catch (Exception e) { }
-
-                int imdbVotes = Integer.parseInt(splitComma[5].replace("\"", ""));
-                double imdbRating = Double.parseDouble(splitComma[6].replace("\"", ""));
-
-                // TODO ADD A FUNCTION TO LOOP AND REMOVE ALL COMMAS
-
-                System.out.println("id = " + id);
-                System.out.println("title = " + title);
-                System.out.println("plot = " + plot);
-                System.out.println("genre = " + genre);
-                System.out.println("release = " + release);
-                System.out.println("imdbVotes = " + imdbVotes);
-                System.out.println("imdbRating = " + imdbRating);
+                this.movieService.addMovie(movie.setTitle(title).setPlot(plot).setGenre(genre).setReleased(release));
             }
         }
     }
 
     private void parseDirectors(List<String> dataList) {
-
+        for (String data : dataList) {
+            String[] splitComma = data.split(",");
+            if (splitComma.length == 2) {
+                String name = splitComma[1].replace("\"", "").replaceAll("^\\s", "");
+                int id = Integer.parseInt(splitComma[0].replace("\"", ""));
+                this.movieService.addDirector(new Director().setId(id).setName(name));
+            }
+        }
     }
 
     private void parseActorsInMovies(List<String> dataList) {
+        for (String data : dataList) {
+            String[] splitComma = data.split(",");
+            if (splitComma.length == 2) {
+                int actorId = Integer.parseInt(splitComma[0].replace("\"", ""));
+                int movieId = Integer.parseInt(splitComma[1].replace("\"", ""));
+                if (actorId != 0 &&  movieId != 0) {
+                    Actor actorById = this.movieService.getActorById(actorId);
+                    Movie movieById = this.movieService.getMovieById(movieId);
+                    actorById.getMovies().add(movieById.getId());
 
+                    // TODO broken as well - both get*ById return null
+                }
+            }
+
+        }
     }
 
     private void parseDirectorInMovie(List<String> dataList) {
@@ -130,6 +145,8 @@ public class ReaderService {
                     Director directorById = this.movieService.getDirectorById(directorId);
                     Movie movieById = this.movieService.getMovieById(movieId);
                     directorById.getMovies().add(movieById.getId());
+
+                    // TODO FIX - both get*ById return null
                 }
             }
         }
