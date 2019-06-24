@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Actor {
@@ -24,6 +25,7 @@ public class Actor {
     public List<Integer> getMovies() {
         return movies;
     }
+
     public Actor setName(String name) {
         this.name = name;
         return this;

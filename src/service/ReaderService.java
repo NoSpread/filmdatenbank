@@ -83,7 +83,7 @@ public class ReaderService {
                 for (int i = 0; i < 7; i++) {
                     try {
                        splitComma[i] = splitComma[i].replace("\"", "");
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
 
                     }
                 }
@@ -100,8 +100,8 @@ public class ReaderService {
                     imdbRating = Double.parseDouble(splitComma[6]);
                     imdbVotes = Integer.parseInt(splitComma[5]);
                     movie.setImdbRating(imdbRating).setImdbVotes(imdbVotes);
-                } catch (Exception e) { }
-                this.movieService.addMovie(movie.setTitle(title).setPlot(plot).setGenre(genre).setReleased(release));
+                } catch (Exception ignored) { }
+                this.movieService.addMovie(movie.setId(id).setTitle(title).setPlot(plot).setGenre(genre).setReleased(release));
             }
         }
     }
