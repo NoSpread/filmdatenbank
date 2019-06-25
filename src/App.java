@@ -11,7 +11,6 @@ public class App {
         this.movieService = new MovieService();
         this.readerService = new ReaderService(this.movieService);
         this.readerService.readFile();
-
         this.controlService = new ControlService(params, this.movieService);
 
         System.out.println("Passed params:");
