@@ -7,10 +7,9 @@ public class ControlService {
 
     public ControlService(String[] params, MovieService movieService) {
         this.movieService = movieService;
-        this.parseParams(params);
     }
 
-    private void parseParams(String[] params) {
+    public void parseParams(String[] params) {
         // we just want to check the first parameter. Every other parameter can be ignored.
         // Tell the user that the params were ignored
         if (params.length > 1) {

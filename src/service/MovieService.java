@@ -3,6 +3,7 @@ package service;
 import model.Actor;
 import model.Movie;
 import model.Director;
+import org.omg.CORBA.Any;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,32 +83,55 @@ public class MovieService {
 
 
     public void addMovie(Movie movie) {
-        for (Movie inListMovie : movies) {
-            if (inListMovie.getId() != movie.getId()) {
-                this.movies.add(movie);
-            } else {
-                System.out.println("Duplicate entry for id " + movie.getId());
-            }
+        if (!this.containsMovie(this.movies, 0, movie.getTitle())) {
+            this.movies.add(movie);
+        } else {
+            System.out.println("Did not add movie { " + movie.getTitle() + " }.");
         }
     }
 
-    public void addActor(Actor actor) {
-        for (Actor inListActors : actors) {
-            if (inListActors.getId() != actor.getId()) {
-                this.actors.add(actor);
-            } else {
-                System.out.println("Duplicate entry for id " + actor.getId());
-            }
+    public Actor addActor(Actor actor) {
+        if (!this.containsActor(this.actors, 0, actor.getName())) {
+            this.actors.add(actor);
+            return null;
+        } else {
+            return actor;
         }
     }
 
     public void addDirector(Director director) {
-        for (Director inListDirectors : directors) {
-            if (inListDirectors.getId() != director.getId()) {
-                this.directors.add(director);
-            } else {
-                System.out.println("Duplicate entry for id " + director.getId());
-            }
+        if (!this.containsDirector(this.directors, 0, director.getName())) {
+            this.directors.add(director);
+        } else {
+            System.out.println("Did not add director { " + director.getName() + " }.");
+        }
+    }
+
+    /*
+    *   Pass either int value or string value to check if the id or the name is already present in the
+    *   passed list.
+     */
+    private boolean containsActor(final List<Actor> list, final int intValue, final String stringValue) {
+        if (intValue != 0) {
+            return list.stream().anyMatch(o -> o.getId() == intValue);
+        } else {
+            return list.stream().anyMatch(o -> o.getName().toLowerCase().equals(stringValue.toLowerCase()));
+        }
+    }
+
+    private boolean containsMovie(final List<Movie> list, final int intValue, final String stringValue) {
+        if (intValue != 0) {
+            return list.stream().anyMatch(o -> o.getId() == intValue);
+        } else {
+            return list.stream().anyMatch(o -> o.getTitle().toLowerCase().contains(stringValue.toLowerCase()));
+        }
+    }
+
+    private boolean containsDirector(final List<Director> list, final int intValue, final String stringValue) {
+        if (intValue != 0) {
+            return list.stream().anyMatch(o -> o.getId() == intValue);
+        } else {
+            return list.stream().anyMatch(o -> o.getName().toLowerCase().equals(stringValue.toLowerCase()));
         }
     }
 

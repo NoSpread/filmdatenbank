@@ -2,6 +2,8 @@ import service.ControlService;
 import service.MovieService;
 import service.ReaderService;
 
+import java.io.BufferedReader;
+
 public class App {
     private ReaderService readerService;
     private MovieService movieService;
@@ -10,8 +12,13 @@ public class App {
     public App(String[] params) {
         this.movieService = new MovieService();
         this.readerService = new ReaderService(this.movieService);
-        this.readerService.readFile();
+        // read the file and create the arrays
+        BufferedReader bufferedReader = this.readerService.readFile();
+        this.readerService.getData(bufferedReader);
+
         this.controlService = new ControlService(params, this.movieService);
+
+        this.controlService.parseParams(params);
 
         System.out.println("Passed params:");
         for (int i = 0; i < params.length; i++) {

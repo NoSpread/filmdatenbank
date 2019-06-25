@@ -20,18 +20,18 @@ public class ReaderService {
         this.movieService = movieService;
     }
 
-    public void readFile() {
+    public BufferedReader readFile() {
         try {
             File dbFile = new File("data.db");
-            BufferedReader read = new BufferedReader(new FileReader(dbFile));
             System.out.println("File successfully read!");
-            this.getData(read);
+            return new BufferedReader(new FileReader(dbFile));
         } catch (Exception e) {
             System.out.println("File not found!");
+            return null;
         }
     }
 
-    private void getData(BufferedReader bufferedReader) {
+    public void getData(BufferedReader bufferedReader) {
         Map<String, List<String>> dataSet = new HashMap<>();
         String prevLine = null;
         while (true) {
@@ -51,6 +51,7 @@ public class ReaderService {
                 }
             }
         }
+        // create values
         for (Map.Entry<String, List<String>> entry : dataSet.entrySet()) {
             switch (entry.getKey()) {
                 case "New_Entity: " + ACTOR_STOP: this.parseActors(entry.getValue()); break;
@@ -64,13 +65,18 @@ public class ReaderService {
     }
 
     private void parseActors(List<String> dataList) {
+        List<Actor> duplicateActors = new ArrayList<>();
         for (String data : dataList) {
             String[] splitComma = data.split(",");
             if (splitComma.length == 2) {
                 String name = splitComma[1].replace("\"", "").replaceAll("^\\s", "");
                 int id = Integer.parseInt(splitComma[0].replace("\"", ""));
-                this.movieService.addActor(new Actor().setId(id).setName(name));
+                Actor dupActor = this.movieService.addActor(new Actor().setId(id).setName(name));
+                if (dupActor != null) { duplicateActors.add(dupActor); }
             }
+        }
+        if (duplicateActors.size() > 0) {
+            System.out.println("Found " + duplicateActors.size() + " duplicates (" + duplicateActors.size() + "/" + dataList.size() + ").");
         }
     }
 
