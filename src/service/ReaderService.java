@@ -3,6 +3,8 @@ package service;
 import model.Actor;
 import model.Director;
 import model.Movie;
+import utility.ReaderEventListener;
+import utility.RunneableThread;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +17,8 @@ import static utility.StopCodes.*;
 
 public class ReaderService {
     private MovieService movieService;
+    // reader listener
+    private ReaderEventListener readerListener;
 
     public ReaderService(MovieService movieService) {
         this.movieService = movieService;
@@ -31,13 +35,19 @@ public class ReaderService {
         }
     }
 
+    private void registerReaderListener(ReaderEventListener listener) {
+        this.readerListener = listener;
+    }
+
     public void getData(BufferedReader bufferedReader) {
         Map<String, List<String>> dataSet = new HashMap<>();
         String prevLine = null;
         while (true) {
             String data = prevLine == null ? this.readMyLine(bufferedReader) : prevLine;
             prevLine = null;
-            if (data == null) { break; }
+            if (data == null) {
+                break;
+            }
             List<String> cDataList = new ArrayList<>();
             if (hasStopCode(data)) {
                 dataSet.put(data, cDataList);
@@ -51,18 +61,96 @@ public class ReaderService {
                 }
             }
         }
+        this.startChunk(dataSet);
+    }
+
+    //region chunking
+    private void startChunk(Map<String, List<String>> dataSet) {
+        if (dataSet.size() == 0) { return; }
         // create values
         for (Map.Entry<String, List<String>> entry : dataSet.entrySet()) {
             switch (entry.getKey()) {
-                case "New_Entity: " + ACTOR_STOP: this.parseActors(entry.getValue()); break;
-                case "New_Entity: " + MOVIE_STOP: this.parseMovies(entry.getValue()); break;
-                case "New_Entity: " + DIRECTOR_STOP: this.parseDirectors(entry.getValue()); break;
-                case "New_Entity: " + DIRECTOR_MOVIE_STOP: this.parseDirectorInMovie(entry.getValue()); break;
-                case "New_Entity: " + ACTOR_MOVIE_STOP: this.parseActorsInMovies(entry.getValue()); break;
-                default: return;
+                case ACTOR_STOP:
+                    new Thread(new RunneableThread(this, dataSet) {
+                        @Override
+                        public void run() {
+                            // start with the first chunk
+                            this.readerService.parseActorsInMovies(entry.getValue());
+                            if (readerListener != null) {
+                                // callback for asynchrous method
+                                // remove chunk
+                                this.dataSet.remove(entry.getKey());
+                                this.readerService.startChunk(this.dataSet);
+                            }
+                        }
+                    }).start();
+                    break;
+                case MOVIE_STOP:
+                    new Thread(new RunneableThread(this, dataSet) {
+                        @Override
+                        public void run() {
+                            // start with the first chunk
+                            this.readerService.parseMovies(entry.getValue());
+                            if (readerListener != null) {
+                                // callback for asynchrous method
+                                // remove chunk
+                                this.dataSet.remove(entry.getKey());
+                                this.readerService.startChunk(this.dataSet);
+                            }
+                        }
+                    }).start();
+                    break;
+                case DIRECTOR_STOP:
+                    new Thread(new RunneableThread(this, dataSet) {
+                        @Override
+                        public void run() {
+                            // start with the first chunk
+                            this.readerService.parseDirectors(entry.getValue());
+                            if (readerListener != null) {
+                                // callback for asynchrous method
+                                // remove chunk
+                                this.dataSet.remove(entry.getKey());
+                                this.readerService.startChunk(this.dataSet);
+                            }
+                        }
+                    }).start();
+                    break;
+                case DIRECTOR_MOVIE_STOP:
+                    new Thread(new RunneableThread(this, dataSet) {
+                        @Override
+                        public void run() {
+                            // start with the first chunk
+                            this.readerService.parseDirectorInMovie(entry.getValue());
+                            if (readerListener != null) {
+                                // callback for asynchrous method
+                                // remove chunk
+                                this.dataSet.remove(entry.getKey());
+                                this.readerService.startChunk(this.dataSet);
+                            }
+                        }
+                    }).start();
+                    break;
+                case ACTOR_MOVIE_STOP:
+                    new Thread(new RunneableThread(this, dataSet) {
+                        @Override
+                        public void run() {
+                            // start with the first chunk
+                            this.readerService.parseActorsInMovies(entry.getValue());
+                            if (readerListener != null) {
+                                // callback for asynchrous method
+                                // remove chunk
+                                this.dataSet.remove(entry.getKey());
+                                this.readerService.startChunk(this.dataSet);
+                            }
+                        }
+                    }).start();
+                    break;
+                default:
+                    return;
             }
         }
     }
+    //endregion
 
     private void parseActors(List<String> dataList) {
         List<Actor> duplicateActors = new ArrayList<>();
