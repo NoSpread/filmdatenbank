@@ -1,11 +1,12 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Actor {
     private int id;
     private String name;
-    private List<Integer> movies;
+    private List<Integer> movies = new ArrayList<>();
 
     // region Getter/Setter
     public int getId() {

@@ -3,7 +3,6 @@ package service;
 import model.Actor;
 import model.Movie;
 import model.Director;
-import org.omg.CORBA.Any;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,14 +52,14 @@ public class MovieService {
         }
     }
 
-    public List<Actor> getActorByName(String name) {
-        List<Actor> actorList = new ArrayList<>();
+    public void getActorByName(String name) {
+        // List<Actor> actorList = new ArrayList<>();
         for (Actor actor : this.actors) {
             if (actor.getName().toLowerCase().contains(name.toLowerCase())) {
-                actorList.add(actor);
+                System.out.println("> " + actor.getName());
             }
         }
-        return actorList;
+        //return actorList;
     }
 
     public Director getDirectorById(int id) {
@@ -74,7 +73,7 @@ public class MovieService {
 
     public Actor getActorById(int id) {
         for (Actor actor : this.actors) {
-            if (actor.getId() != id) {
+            if (actor.getId() == id) {
                 return actor;
             }
         }

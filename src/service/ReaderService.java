@@ -19,6 +19,9 @@ public class ReaderService {
     private MovieService movieService;
     // reader listener
     private ReaderEventListener readerListener;
+    // debug
+    private Map<String, List<String>> dataSet = new HashMap<>();
+    private Map<String, List<String>> dependData = new HashMap<>();
 
     public ReaderService(MovieService movieService) {
         this.movieService = movieService;
@@ -26,7 +29,7 @@ public class ReaderService {
 
     public BufferedReader readFile() {
         try {
-            File dbFile = new File("data.db");
+            File dbFile = new File("src/data.db");
             System.out.println("File successfully read!");
             return new BufferedReader(new FileReader(dbFile));
         } catch (Exception e) {
@@ -61,11 +64,68 @@ public class ReaderService {
                 }
             }
         }
-        this.startChunk(dataSet);
+        this.dataSet = dataSet;
+        this.startChunk(dataSet.entrySet().iterator().next());
+    }
+
+    /*
+
+    -> DataSet (Map)
+    1. Parse actors
+    2. Parse movies
+    3. Parse directors
+    ---
+
+
+     */
+
+    private void startChunk(Map.Entry<String, List<String>> entry) {
+        if (this.dataSet.size() == 0 && this.dependData.size() == 0) { return; }
+        if (this.dataSet.size() == 0 && this.dependData.size() > 0) {
+            switch (entry.getKey()) {
+                case ACTOR_MOVIE_STOP:
+                    this.parseActorsInMovies(entry);
+                    this.dependData.remove(entry.getKey());
+                    if (this.dependData.size() == 0) { return; }
+                    this.startChunk(this.dependData.entrySet().iterator().next());
+                    return;
+                case DIRECTOR_MOVIE_STOP:
+                    this.parseDirectorInMovie(entry);
+                    this.dependData.remove(entry.getKey());
+                    if (this.dependData.size() == 0) { return; }
+                    this.startChunk(this.dependData.entrySet().iterator().next());
+                    return;
+            }
+        }
+
+        switch (entry.getKey()) {
+            case ACTOR_STOP:
+                this.parseActors(entry);
+                dataSet.remove(entry.getKey());
+                if (this.dataSet.size() == 0) { this.startChunk(this.dependData.entrySet().iterator().next()); }
+                this.startChunk(this.dataSet.entrySet().iterator().next());
+                return;
+            case DIRECTOR_STOP:
+                this.parseDirectors(entry);
+                dataSet.remove(entry.getKey());
+                if (this.dataSet.size() == 0) { this.startChunk(this.dependData.entrySet().iterator().next()); }
+                this.startChunk(this.dataSet.entrySet().iterator().next());
+                return;
+            case MOVIE_STOP:
+                this.parseMovies(entry);
+                dataSet.remove(entry.getKey());
+                if (this.dataSet.size() == 0) { this.startChunk(this.dependData.entrySet().iterator().next()); }
+                this.startChunk(this.dataSet.entrySet().iterator().next());
+            default:
+                this.dependData.put(entry.getKey(), entry.getValue());
+                this.dataSet.remove(entry.getKey());
+                this.startChunk(this.dataSet.entrySet().iterator().next());
+                break;
+        }
     }
 
     //region chunking
-    private void startChunk(Map<String, List<String>> dataSet) {
+/*    private void startChunk(Map<String, List<String>> dataSet) {
         if (dataSet.size() == 0) { return; }
         // create values
         for (Map.Entry<String, List<String>> entry : dataSet.entrySet()) {
@@ -106,35 +166,35 @@ public class ReaderService {
                         }
                     }).start();
                     return;
-                case DIRECTOR_MOVIE_STOP:
-                    this.readerListener = null;
-                    new Thread(new RunneableThread(this, dataSet) {
-                        @Override
-                        public void run() {
-                            // start with the first chunk
-                            this.readerService.parseDirectorInMovie(entry);
-                            this.dataSet.remove(entry.getKey());
-                            this.readerService.startChunk(this.dataSet);
-                        }
-                    }).start();
-                    return;
-                case ACTOR_MOVIE_STOP:
-                    this.readerListener = null;
-                    new Thread(new RunneableThread(this, dataSet) {
-                        @Override
-                        public void run() {
-                            // start with the first chunk
-                            this.readerService.parseActorsInMovies(entry);
-                            this.dataSet.remove(entry.getKey());
-                            this.readerService.startChunk(this.dataSet);
-                        }
-                    }).start();
-                    return;
+//                case DIRECTOR_MOVIE_STOP:
+//                    this.readerListener = null;
+//                    new Thread(new RunneableThread(this, dataSet) {
+//                        @Override
+//                        public void run() {
+//                            // start with the first chunk
+//                            this.readerService.parseDirectorInMovie(entry);
+//                            this.dataSet.remove(entry.getKey());
+//                            this.readerService.startChunk(this.dataSet);
+//                        }
+//                    }).start();
+//                    return;
+//                case ACTOR_MOVIE_STOP:
+//                    this.readerListener = null;
+//                    new Thread(new RunneableThread(this, dataSet) {
+//                        @Override
+//                        public void run() {
+//                            // start with the first chunk
+//                            this.readerService.parseActorsInMovies(entry);
+//                            this.dataSet.remove(entry.getKey());
+//                            this.readerService.startChunk(this.dataSet);
+//                        }
+//                    }).start();
+//                    return;
                 default:
                     return;
             }
         }
-    }
+    }*/
     //endregion
 
     private void parseActors(Map.Entry<String, List<String>> entry) {
@@ -205,9 +265,12 @@ public class ReaderService {
                 if (actorId != 0 &&  movieId != 0) {
                     Actor actorById = this.movieService.getActorById(actorId);
                     Movie movieById = this.movieService.getMovieById(movieId);
+                    if (actorById == null || movieById == null) {
+                        System.out.println("Could not find object for IDs => { " + actorId + " / " + movieId + " }");
+                        continue;
+                    }
                     actorById.getMovies().add(movieById.getId());
-
-                    // TODO broken as well - both get*ById return null
+                    movieById.getActors().add(actorById.getId());
                 }
             }
 
@@ -223,18 +286,17 @@ public class ReaderService {
                 if (directorId != 0 && movieId != 0) {
                     Director directorById = this.movieService.getDirectorById(directorId);
                     Movie movieById = this.movieService.getMovieById(movieId);
+                    if (directorById == null || movieById == null) {
+                        System.out.println("Could not find object for IDs => { " + directorId + " / " + movieId + " }");
+                        continue;
+                    }
                     directorById.getMovies().add(movieById.getId());
-
-                    // TODO FIX - both get*ById return null
+                    movieById.getDirectors().add(directorById.getId());
                 }
             }
         }
     }
 
-    private void removeEntry(Map<String, List<String>> dataSet, Map.Entry<String, List<String>> entry) {
-        dataSet.remove(entry.getKey());
-        this.startChunk(dataSet);
-    }
 
     private boolean hasStopCode(String data) {
         if (data.contains(ACTOR_STOP) || data.contains(MOVIE_STOP) || data.contains(DIRECTOR_STOP) || data.contains(DIRECTOR_MOVIE_STOP) || data.contains(ACTOR_MOVIE_STOP)) {

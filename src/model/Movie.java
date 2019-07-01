@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,10 +12,28 @@ public class Movie {
     private Date released;
     private int imdbVotes;
     private double imdbRating;
-    private List<Integer> actors;
-    private List<Integer> directors;
+    private List<Integer> actors = new ArrayList<>();
+    private List<Integer> directors = new ArrayList<>();
 
     //region Getter/Setter
+    public List<Integer> getActors() {
+        return actors;
+    }
+
+    public Movie setActors(List<Integer> actors) {
+        this.actors = actors;
+        return this;
+    }
+
+    public List<Integer> getDirectors() {
+        return directors;
+    }
+
+    public Movie setDirectors(List<Integer> directors) {
+        this.directors = directors;
+        return this;
+    }
+
     public int getId() {
         return id;
     }

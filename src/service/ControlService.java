@@ -47,8 +47,7 @@ public class ControlService {
                     break;
                 case ACTORSEARCH: // expects a string as data
                     String data = this.checkForStringData(splitAtEquals[1], param);
-
-                    // TODO : Pass data to the function
+                    this.movieService.getActorByName(data);
                     break;
                 case ACTORNETWORK: // expects a int as data
                     this.checkForIntData(splitAtEquals[1], param);
