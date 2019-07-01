@@ -75,7 +75,7 @@ public class ReaderService {
                         @Override
                         public void run() {
                             // start with the first chunk
-                            this.readerService.parseActorsInMovies(entry.getValue());
+                            this.readerService.parseActors(entry.getValue());
                             if (readerListener != null) {
                                 // callback for asynchrous method
                                 // remove chunk
