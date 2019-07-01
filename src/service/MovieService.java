@@ -74,7 +74,7 @@ public class MovieService {
 
     public Actor getActorById(int id) {
         for (Actor actor : this.actors) {
-            if (actor.getId() != id) {
+            if (actor.getId() == id) {
                 return actor;
             }
         }
@@ -95,6 +95,7 @@ public class MovieService {
             this.actors.add(actor);
             return null;
         } else {
+            System.out.println("Did not add Actor { " + actor.getName() + " }.");
             return actor;
         }
     }

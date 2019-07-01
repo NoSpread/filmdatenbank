@@ -68,6 +68,7 @@ public class ReaderService {
     private void startChunk(Map<String, List<String>> dataSet) {
         if (dataSet.size() == 0) { return; }
         // create values
+
         for (Map.Entry<String, List<String>> entry : dataSet.entrySet()) {
             switch (entry.getKey()) {
                 case ACTOR_STOP:
@@ -247,11 +248,7 @@ public class ReaderService {
     }
 
     private boolean hasStopCode(String data) {
-        if (data.contains(ACTOR_STOP) || data.contains(MOVIE_STOP) || data.contains(DIRECTOR_STOP) || data.contains(DIRECTOR_MOVIE_STOP) || data.contains(ACTOR_MOVIE_STOP)) {
-            return true;
-        } else {
-            return false;
-        }
+        return data.contains(ACTOR_STOP) || data.contains(MOVIE_STOP) || data.contains(DIRECTOR_STOP) || data.contains(DIRECTOR_MOVIE_STOP) || data.contains(ACTOR_MOVIE_STOP);
     }
 
     private String readMyLine(BufferedReader bufferedReader) {
