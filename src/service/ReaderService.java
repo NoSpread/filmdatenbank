@@ -71,80 +71,65 @@ public class ReaderService {
         for (Map.Entry<String, List<String>> entry : dataSet.entrySet()) {
             switch (entry.getKey()) {
                 case ACTOR_STOP:
+                    this.readerListener = null;
                     new Thread(new RunneableThread(this, dataSet) {
                         @Override
                         public void run() {
                             // start with the first chunk
-                            this.readerService.parseActorsInMovies(entry.getValue());
-                            if (readerListener != null) {
-                                // callback for asynchrous method
-                                // remove chunk
-                                this.dataSet.remove(entry.getKey());
-                                this.readerService.startChunk(this.dataSet);
-                            }
+                            this.readerService.parseActors(entry);
+                            this.dataSet.remove(entry.getKey());
+                            this.readerService.startChunk(this.dataSet);
                         }
                     }).start();
-                    break;
+                    return;
                 case MOVIE_STOP:
+                    this.readerListener = null;
                     new Thread(new RunneableThread(this, dataSet) {
                         @Override
                         public void run() {
                             // start with the first chunk
-                            this.readerService.parseMovies(entry.getValue());
-                            if (readerListener != null) {
-                                // callback for asynchrous method
-                                // remove chunk
-                                this.dataSet.remove(entry.getKey());
-                                this.readerService.startChunk(this.dataSet);
-                            }
+                            this.readerService.parseMovies(entry);
+                            this.dataSet.remove(entry.getKey());
+                            this.readerService.startChunk(this.dataSet);
                         }
                     }).start();
-                    break;
+                    return;
                 case DIRECTOR_STOP:
+                    this.readerListener = null;
                     new Thread(new RunneableThread(this, dataSet) {
                         @Override
                         public void run() {
                             // start with the first chunk
-                            this.readerService.parseDirectors(entry.getValue());
-                            if (readerListener != null) {
-                                // callback for asynchrous method
-                                // remove chunk
-                                this.dataSet.remove(entry.getKey());
-                                this.readerService.startChunk(this.dataSet);
-                            }
+                            this.readerService.parseDirectors(entry);
+                            this.dataSet.remove(entry.getKey());
+                            this.readerService.startChunk(this.dataSet);
                         }
                     }).start();
-                    break;
+                    return;
                 case DIRECTOR_MOVIE_STOP:
+                    this.readerListener = null;
                     new Thread(new RunneableThread(this, dataSet) {
                         @Override
                         public void run() {
                             // start with the first chunk
-                            this.readerService.parseDirectorInMovie(entry.getValue());
-                            if (readerListener != null) {
-                                // callback for asynchrous method
-                                // remove chunk
-                                this.dataSet.remove(entry.getKey());
-                                this.readerService.startChunk(this.dataSet);
-                            }
+                            this.readerService.parseDirectorInMovie(entry);
+                            this.dataSet.remove(entry.getKey());
+                            this.readerService.startChunk(this.dataSet);
                         }
                     }).start();
-                    break;
+                    return;
                 case ACTOR_MOVIE_STOP:
+                    this.readerListener = null;
                     new Thread(new RunneableThread(this, dataSet) {
                         @Override
                         public void run() {
                             // start with the first chunk
-                            this.readerService.parseActorsInMovies(entry.getValue());
-                            if (readerListener != null) {
-                                // callback for asynchrous method
-                                // remove chunk
-                                this.dataSet.remove(entry.getKey());
-                                this.readerService.startChunk(this.dataSet);
-                            }
+                            this.readerService.parseActorsInMovies(entry);
+                            this.dataSet.remove(entry.getKey());
+                            this.readerService.startChunk(this.dataSet);
                         }
                     }).start();
-                    break;
+                    return;
                 default:
                     return;
             }
@@ -152,9 +137,9 @@ public class ReaderService {
     }
     //endregion
 
-    private void parseActors(List<String> dataList) {
+    private void parseActors(Map.Entry<String, List<String>> entry) {
         List<Actor> duplicateActors = new ArrayList<>();
-        for (String data : dataList) {
+        for (String data : entry.getValue()) {
             String[] splitComma = data.split(",");
             if (splitComma.length == 2) {
                 String name = splitComma[1].replace("\"", "").replaceAll("^\\s", "");
@@ -164,13 +149,13 @@ public class ReaderService {
             }
         }
         if (duplicateActors.size() > 0) {
-            System.out.println("Found " + duplicateActors.size() + " duplicates (" + duplicateActors.size() + "/" + dataList.size() + ").");
+            System.out.println("Found " + duplicateActors.size() + " duplicates (" + duplicateActors.size() + "/" + entry.getValue().size() + ").");
         }
     }
 
-    private void parseMovies(List<String> dataList) {
+    private void parseMovies(Map.Entry<String, List<String>> entry) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-        for (String data : dataList) {
+        for (String data : entry.getValue()) {
             String[] splitComma = data.split("\",\"");
             if (splitComma.length == 7) {
                 int id = Integer.parseInt(splitComma[0].replace("\"", ""));
@@ -200,8 +185,8 @@ public class ReaderService {
         }
     }
 
-    private void parseDirectors(List<String> dataList) {
-        for (String data : dataList) {
+    private void parseDirectors(Map.Entry<String, List<String>> entry) {
+        for (String data : entry.getValue()) {
             String[] splitComma = data.split(",");
             if (splitComma.length == 2) {
                 String name = splitComma[1].replace("\"", "").replaceAll("^\\s", "");
@@ -211,8 +196,8 @@ public class ReaderService {
         }
     }
 
-    private void parseActorsInMovies(List<String> dataList) {
-        for (String data : dataList) {
+    private void parseActorsInMovies(Map.Entry<String, List<String>> entry) {
+        for (String data : entry.getValue()) {
             String[] splitComma = data.split(",");
             if (splitComma.length == 2) {
                 int actorId = Integer.parseInt(splitComma[0].replace("\"", ""));
@@ -229,8 +214,8 @@ public class ReaderService {
         }
     }
 
-    private void parseDirectorInMovie(List<String> dataList) {
-        for (String data : dataList) {
+    private void parseDirectorInMovie(Map.Entry<String, List<String>> entry) {
+        for (String data : entry.getValue()) {
             String[] splitComma = data.split(",");
             if (splitComma.length == 2) {
                 int directorId = Integer.parseInt(splitComma[0].replace("\"", ""));
@@ -244,6 +229,11 @@ public class ReaderService {
                 }
             }
         }
+    }
+
+    private void removeEntry(Map<String, List<String>> dataSet, Map.Entry<String, List<String>> entry) {
+        dataSet.remove(entry.getKey());
+        this.startChunk(dataSet);
     }
 
     private boolean hasStopCode(String data) {
