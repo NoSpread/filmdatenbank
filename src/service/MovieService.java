@@ -57,7 +57,12 @@ public class MovieService {
         // List<Actor> actorList = new ArrayList<>();
         for (Actor actor : this.actors) {
             if (actor.getName().toLowerCase().contains(name.toLowerCase())) {
-                System.out.println("> " + actor.getName());
+                System.out.println("NAME => " + actor.getName());
+                System.out.println("actor.getMovies() = " + actor.getMovies());
+                for (int id : actor.getMovies()) {
+                    Movie movie = getMovieById(id);
+                    System.out.println("movie = " + movie.getTitle());
+                }
             }
         }
         //return actorList;
@@ -86,7 +91,7 @@ public class MovieService {
         if (!this.containsMovie(this.movies, 0, movie.getTitle())) {
             this.movies.add(movie);
         } else {
-            System.out.println("Did not add movie { " + movie.getTitle() + " }.");
+            //System.out.println("Did not add movie { " + movie.getTitle() + " }.");
         }
     }
 
@@ -95,7 +100,7 @@ public class MovieService {
             this.actors.add(actor);
             return null;
         } else {
-            System.out.println("Did not add Actor { " + actor.getName() + " }.");
+            //System.out.println("Did not add Actor { " + actor.getName() + " }.");
             return actor;
         }
     }
@@ -104,7 +109,7 @@ public class MovieService {
         if (!this.containsDirector(this.directors, 0, director.getName())) {
             this.directors.add(director);
         } else {
-            System.out.println("Did not add director { " + director.getName() + " }.");
+            //System.out.println("Did not add director { " + director.getName() + " }.");
         }
     }
 
@@ -124,7 +129,7 @@ public class MovieService {
         if (intValue != 0) {
             return list.stream().anyMatch(o -> o.getId() == intValue);
         } else {
-            return list.stream().anyMatch(o -> o.getTitle().toLowerCase().contains(stringValue.toLowerCase()));
+            return list.stream().anyMatch(o -> o.getTitle().toLowerCase().equals(stringValue.toLowerCase()));
         }
     }
 

@@ -38,7 +38,7 @@ public class ControlService {
         if (param.contains("--")) {
             String noDashes = param.replace("--","");
             String[] splitAtEquals = noDashes.split("=");
-            // this should be an array with 2 elemnts now. The first element should contain the command
+            // this should be an array with 2 elements now. The first element should contain the command
             // and the second should contain the data passed to the program
             // Now check if we understand the command
             switch (splitAtEquals[0]) {

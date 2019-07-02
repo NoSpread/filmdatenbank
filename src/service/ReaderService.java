@@ -102,20 +102,21 @@ public class ReaderService {
             case ACTOR_STOP:
                 this.parseActors(entry);
                 dataSet.remove(entry.getKey());
-                if (this.dataSet.size() == 0) { this.startChunk(this.dependData.entrySet().iterator().next()); }
+                if (this.dataSet.size() == 0) { this.startChunk(this.dependData.entrySet().iterator().next()); return;}
                 this.startChunk(this.dataSet.entrySet().iterator().next());
                 return;
             case DIRECTOR_STOP:
                 this.parseDirectors(entry);
                 dataSet.remove(entry.getKey());
-                if (this.dataSet.size() == 0) { this.startChunk(this.dependData.entrySet().iterator().next()); }
+                if (this.dataSet.size() == 0) { this.startChunk(this.dependData.entrySet().iterator().next()); return; }
                 this.startChunk(this.dataSet.entrySet().iterator().next());
                 return;
             case MOVIE_STOP:
                 this.parseMovies(entry);
                 dataSet.remove(entry.getKey());
-                if (this.dataSet.size() == 0) { this.startChunk(this.dependData.entrySet().iterator().next()); }
+                if (this.dataSet.size() == 0) { this.startChunk(this.dependData.entrySet().iterator().next()); return;}
                 this.startChunk(this.dataSet.entrySet().iterator().next());
+                return;
             default:
                 this.dependData.put(entry.getKey(), entry.getValue());
                 this.dataSet.remove(entry.getKey());
@@ -234,6 +235,10 @@ public class ReaderService {
                 double imdbRating;
                 int imdbVotes;
 
+                if (splitComma[4].equals("")) splitComma[4] = "0000-00-00";
+                if (splitComma[5].equals("")) splitComma[5] = "0";
+                if (splitComma[6].equals("")) splitComma[6] = "0";
+
                 Movie movie = new Movie();
                 try {
                     release = format.parse(splitComma[4]);
@@ -267,7 +272,7 @@ public class ReaderService {
                     Actor actorById = this.movieService.getActorById(actorId);
                     Movie movieById = this.movieService.getMovieById(movieId);
                     if (actorById == null || movieById == null) {
-                        System.out.println("Could not find object for IDs => { " + actorId + " / " + movieId + " }");
+                        //System.out.println("Could not find object for IDs => { " + actorId + " / " + movieId + " }");
                         continue;
                     }
                     actorById.getMovies().add(movieById.getId());
@@ -288,7 +293,7 @@ public class ReaderService {
                     Director directorById = this.movieService.getDirectorById(directorId);
                     Movie movieById = this.movieService.getMovieById(movieId);
                     if (directorById == null || movieById == null) {
-                        System.out.println("Could not find object for IDs => { " + directorId + " / " + movieId + " }");
+                        //System.out.println("Could not find object for IDs => { " + directorId + " / " + movieId + " }");
                         continue;
                     }
                     directorById.getMovies().add(movieById.getId());
