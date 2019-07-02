@@ -3,6 +3,7 @@ package service;
 import model.Actor;
 import model.Movie;
 import model.Director;
+//import org.omg.CORBA.Any;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +95,7 @@ public class MovieService {
             this.actors.add(actor);
             return null;
         } else {
+            System.out.println("Did not add Actor { " + actor.getName() + " }.");
             return actor;
         }
     }
