@@ -1,5 +1,9 @@
 package service;
 
+import model.*;
+
+import java.util.List;
+
 import static utility.Parameters.*;
 
 public class ControlService {
@@ -46,14 +50,35 @@ public class ControlService {
                     this.movieService.getMovieByTitle(this.checkForStringData(splitAtEquals[1], param));
                     break;
                 case ACTORSEARCH: // expects a string as data
-                    String data = this.checkForStringData(splitAtEquals[1], param);
-                    this.movieService.getActorByName(data);
+                    this.movieService.getActorByName(this.checkForStringData(splitAtEquals[1], param));
                     break;
                 case ACTORNETWORK: // expects a int as data
-                    this.checkForIntData(splitAtEquals[1], param);
+                    int dat = this.checkForIntData(splitAtEquals[1], param);
+                    Actor actor = this.movieService.getActorById(dat);
+                    List<Integer> movieid = actor.getMovies();
+                    for (int id : movieid) {
+                        Movie movie = this.movieService.getMovieById(id);
+                        System.out.println("Movie => " + movie.getTitle());
+                        List<Integer> actorid = movie.getActors();
+                        for(int x : actorid) {
+                            Actor subActor = this.movieService.getActorById(x);
+                            System.out.println("  Actor => " + subActor.getName());
+                        }
+                    }
                     break;
                 case MOVIENETWORK: // expects a int as data
-
+                    int data = this.checkForIntData(splitAtEquals[1], param);
+                    Movie movie = this.movieService.getMovieById(data);
+                    List<Integer> actor_id = movie.getActors();
+                    for (int act_id : actor_id) {
+                        Actor act = this.movieService.getActorById(act_id);
+                        System.out.println("Actor => " + act.getName());
+                        List<Integer> movie_id = act.getMovies();
+                        for (int y : movie_id) {
+                            Movie subMovie = this.movieService.getMovieById(y);
+                            System.out.println("  Movie => " + subMovie.getTitle());
+                        }
+                    }
                     break;
                 default: damagedParameter(param);
             }

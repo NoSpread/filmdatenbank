@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="196.24982782369136" y="1431.5">App</node>
+    <node x="717.2996212121213" y="1431.0">utility.RunneableThread</node>
+    <node x="195.5" y="523.0">service.MovieService</node>
+    <node x="32.4881542699726" y="1080.0">service.ControlService</node>
+    <node x="718.5" y="634.0">utility.StopCodes</node>
+    <node x="652.0496212121213" y="981.0">service.ReaderService</node>
+    <node x="345.07148760330585" y="0.0">model.Movie</node>
+    <node x="10.5" y="645.0">utility.Parameters</node>
+    <node x="899.4156336088154" y="132.0">model.Director</node>
+    <node x="526.5" y="678.0">utility.ReaderEventListener</node>
+    <node x="188.07148760330585" y="143.0">model.Actor</node>
+    <node x="223.74982782369136" y="1597.0">Main</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="service.ReaderService" target="model.Actor">
+      <point x="0.0" y="-190.0" />
+      <point x="816.5496212121213" y="911.0" />
+      <point x="928.0" y="911.0" />
+      <point x="928.0" y="473.0" />
+      <point x="283.97148760330583" y="473.0" />
+      <point x="27.399999999999977" y="68.5" />
+    </edge>
+    <edge source="service.ReaderService" target="utility.StopCodes">
+      <point x="-29.909090909090878" y="-190.0" />
+      <point x="786.6405303030305" y="901.0" />
+      <point x="818.0" y="901.0" />
+      <point x="0.0" y="68.0" />
+    </edge>
+    <edge source="App" target="service.MovieService">
+      <point x="15.916666666666686" y="-57.5" />
+      <point x="307.66649449035805" y="1391.0" />
+      <point x="355.99896694214874" y="1391.0" />
+      <point x="355.99896694214874" y="961.0" />
+      <point x="376.9166666666667" y="961.0" />
+      <point x="25.916666666666686" y="179.0" />
+    </edge>
+    <edge source="App" target="service.ControlService">
+      <point x="-79.58333333333326" y="-57.5" />
+      <point x="212.1664944903581" y="1411.0" />
+      <point x="94.9881542699726" y="1411.0" />
+      <point x="-62.5" y="91.0" />
+    </edge>
+    <edge source="Main" target="App">
+      <point x="0.0" y="-24.0" />
+      <point x="0.0" y="57.5" />
+    </edge>
+    <edge source="service.ControlService" target="service.MovieService">
+      <point x="50.0" y="-91.0" />
+      <point x="207.4881542699726" y="961.0" />
+      <point x="221.41666666666663" y="961.0" />
+      <point x="-129.58333333333337" y="179.0" />
+    </edge>
+    <edge source="service.ControlService" target="model.Actor">
+      <point x="-100.0" y="-91.0" />
+      <point x="57.4881542699726" y="961.0" />
+      <point x="0.0" y="961.0" />
+      <point x="0.0" y="473.0" />
+      <point x="201.77148760330584" y="473.0" />
+      <point x="-54.80000000000001" y="68.5" />
+    </edge>
+    <edge source="service.ReaderService" target="model.Director">
+      <point x="149.54545454545448" y="-190.0" />
+      <point x="966.0950757575758" y="961.0" />
+      <point x="1002.9156336088154" y="961.0" />
+      <point x="1002.9156336088154" y="503.0" />
+      <point x="1028.9156336088154" y="503.0" />
+      <point x="55.5" y="79.5" />
+    </edge>
+    <edge source="service.ReaderService" target="utility.ReaderEventListener">
+      <point x="-59.818181818181756" y="-190.0" />
+      <point x="756.7314393939396" y="931.0" />
+      <point x="655.5" y="931.0" />
+      <point x="43.0" y="24.0" />
+    </edge>
+    <edge source="App" target="service.ReaderService">
+      <point x="47.75" y="-57.5" />
+      <point x="339.49982782369136" y="1401.0" />
+      <point x="693.1746212121213" y="1401.0" />
+      <point x="-123.375" y="190.0" />
+    </edge>
+    <edge source="utility.RunneableThread" target="service.ReaderService">
+      <point x="-90.75" y="-58.0" />
+      <point x="808.0496212121213" y="1411.0" />
+      <point x="857.6746212121213" y="1411.0" />
+      <point x="41.125" y="190.0" />
+    </edge>
+    <edge source="service.ReaderService" target="service.MovieService">
+      <point x="-119.63636363636363" y="-190.0" />
+      <point x="696.9132575757577" y="951.0" />
+      <point x="480.58333333333337" y="951.0" />
+      <point x="129.58333333333337" y="179.0" />
+    </edge>
+    <edge source="service.MovieService" target="model.Actor">
+      <point x="-129.58333333333337" y="-179.0" />
+      <point x="221.41666666666663" y="473.0" />
+      <point x="229.17148760330588" y="473.0" />
+      <point x="-27.399999999999977" y="68.5" />
+    </edge>
+    <edge source="service.MovieService" target="model.Director">
+      <point x="129.58333333333337" y="-179.0" />
+      <point x="480.58333333333337" y="503.0" />
+      <point x="954.9156336088154" y="503.0" />
+      <point x="-18.5" y="79.5" />
+    </edge>
+    <edge source="service.ReaderService" target="model.Movie">
+      <point x="59.81818181818173" y="-190.0" />
+      <point x="876.3678030303031" y="931.0" />
+      <point x="967.2498278236915" y="931.0" />
+      <point x="967.2498278236915" y="453.0" />
+      <point x="454.97148760330583" y="453.0" />
+      <point x="31.399999999999977" y="211.5" />
+    </edge>
+    <edge source="service.ControlService" target="model.Movie">
+      <point x="0.0" y="-91.0" />
+      <point x="157.4881542699726" y="961.0" />
+      <point x="185.0" y="961.0" />
+      <point x="185.0" y="483.0" />
+      <point x="360.77148760330584" y="483.0" />
+      <point x="-62.80000000000001" y="211.5" />
+    </edge>
+    <edge source="service.ControlService" target="utility.Parameters">
+      <point x="-50.0" y="-91.0" />
+      <point x="107.4881542699726" y="961.0" />
+      <point x="92.5" y="961.0" />
+      <point x="0.0" y="57.0" />
+    </edge>
+    <edge source="service.MovieService" target="model.Movie">
+      <point x="-25.916666666666686" y="-179.0" />
+      <point x="325.0833333333333" y="493.0" />
+      <point x="392.1714876033059" y="493.0" />
+      <point x="-31.399999999999977" y="211.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.5655786350148367" x="733.4961240310079" y="524.5750262329486" />
+  <SelectedNodes>
+    <node>model.Director</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
