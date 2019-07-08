@@ -44,7 +44,7 @@ public class MovieService {
         return null;
     }
 
-    void getMovieByTitle(String title) {
+    public void getMovieByTitle(String title) {
         for (Movie inListMovie : this.movies) {
             if (inListMovie.getTitle().toLowerCase().contains(title.toLowerCase())) {
                 System.out.println("TITLE => " + inListMovie.getTitle());
