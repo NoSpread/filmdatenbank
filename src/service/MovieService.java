@@ -32,6 +32,7 @@ public class MovieService {
     -> get all movies actor played a role in, get all actors in those movies
     // actors
     - getActor by Name (first + last)
+
      */
 
     public Movie getMovieById(int id) {
@@ -94,14 +95,15 @@ public class MovieService {
         }
     }
 
-    public Actor addActor(Actor actor) {
+    public void addActor(Actor actor) {
         if (!this.containsActor(this.actors, 0, actor.getName())) {
             this.actors.add(actor);
-            return null;
-        } else {
-            //System.out.println("Did not add Actor { " + actor.getName() + " }.");
-            return actor;
+            // return null;
         }
+//        else {
+//            //System.out.println("Did not add Actor { " + actor.getName() + " }.");
+//            return actor;
+//        }
     }
 
     public void addDirector(Director director) {

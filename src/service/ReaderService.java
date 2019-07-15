@@ -27,6 +27,12 @@ public class ReaderService {
     public boolean movieDone = false;
     public boolean directorDone = false;
 
+    Thread t1;
+    Thread t2;
+    Thread t3;
+    Thread t4;
+    Thread t5;
+
     public ReaderService(MovieService movieService) {
         this.movieService = movieService;
     }
@@ -81,30 +87,39 @@ public class ReaderService {
         List<String> actorMovieList = listHashMap.get(ACTOR_MOVIE_STOP);
         List<String> directorMovieList = listHashMap.get(DIRECTOR_MOVIE_STOP);
 
-        new Thread(new RunnableThread(this, actorList) {
+        this.t1 = new Thread(new RunnableThread(this, actorList) {
             @Override
             public void run() {
+                System.out.println("Thread Started - 1");
                 this.readerService.parseActors(actorList);
                 this.readerService.actorDone = true;
+                System.out.println("Thread exited - 1");
             }
         });
 
-        new Thread(new RunnableThread(this, movieList) {
+        this.t2 = new Thread(new RunnableThread(this, movieList) {
             @Override
             public void run() {
+                System.out.println("Thread Started - 2");
                 this.readerService.parseMovies(movieList);
                 this.readerService.movieDone = true;
+                System.out.println("Thread exited - 2");
             }
         });
 
-        new Thread(new RunnableThread(this, directorList) {
+        this.t3 = new Thread(new RunnableThread(this, directorList) {
             @Override
             public void run() {
+                System.out.println("Thread Started - 3");
                 this.readerService.parseDirectors(directorList);
                 this.readerService.directorDone = true;
-
+                System.out.println("Thread exited - 3");
             }
         });
+
+        this.t1.start();
+        this.t2.start();
+        this.t3.start();
 
         while(!(actorDone && movieDone && directorDone)) {
             try {
@@ -114,19 +129,25 @@ public class ReaderService {
             }
         }
 
-        new Thread(new RunnableThread(this, actorMovieList) {
+        this.t4 = new Thread(new RunnableThread(this, actorMovieList) {
             @Override
             public void run() {
+                System.out.println("Thread Started - 4");
                 this.readerService.parseActorsInMovies(actorMovieList);
+                System.out.println("Thread exited - 4");
             }
         });
 
-        new Thread(new RunnableThread(this, actorMovieList) {
+        this.t5 = new Thread(new RunnableThread(this, actorMovieList) {
             @Override
             public void run() {
+                System.out.println("Thread Started - 5");
                 this.readerService.parseDirectorInMovie(directorMovieList);
+                System.out.println("Thread exited - 5");
             }
         });
+        this.t4.start();
+        this.t5.start();
     }
 
 //    private void startChunk(Map.Entry<String, List<String>> entry) {
@@ -249,19 +270,20 @@ public class ReaderService {
     //endregion
 
     private void parseActors(List<String> entry) {
-        List<Actor> duplicateActors = new ArrayList<>();
+        // List<Actor> duplicateActors = new ArrayList<>();
         for (String data : entry) {
             String[] splitComma = data.split(",");
             if (splitComma.length == 2) {
                 String name = splitComma[1].replace("\"", "").replaceAll("^\\s", "");
                 int id = Integer.parseInt(splitComma[0].replace("\"", ""));
-                Actor dupActor = this.movieService.addActor(new Actor().setId(id).setName(name));
-                if (dupActor != null) { duplicateActors.add(dupActor); }
+                this.movieService.addActor(new Actor().setId(id).setName(name));
+                // Actor dupActor = this.movieService.addActor(new Actor().setId(id).setName(name));
+                // if (dupActor != null) { duplicateActors.add(dupActor); }
             }
         }
-        if (duplicateActors.size() > 0) {
-            System.out.println("Found " + duplicateActors.size() + " duplicates (" + duplicateActors.size() + "/" + entry.size() + ").");
-        }
+//        if (duplicateActors.size() > 0) {
+//            System.out.println("Found " + duplicateActors.size() + " duplicates (" + duplicateActors.size() + "/" + entry.size() + ").");
+//        }
     }
 
     private void parseMovies(List<String> entry) {
