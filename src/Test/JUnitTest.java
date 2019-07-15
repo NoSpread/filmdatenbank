@@ -1,10 +1,12 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import model.*;
+import model.Actor;
+import model.Director;
+import model.Movie;
 import org.junit.jupiter.api.Test;
 import service.MovieService;
 
 import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JUnitTest {
 
