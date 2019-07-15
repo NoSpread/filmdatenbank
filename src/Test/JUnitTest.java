@@ -1,15 +1,21 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
+package Test;
 
-import model.*;
+import model.Actor;
+import model.Director;
+import model.Movie;
 import org.junit.jupiter.api.Test;
 import service.MovieService;
 
 import java.util.Date;
 
-public class JUnitTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+public class JUnitTest {
+    public static void main(String[] args) {
+        test_MovieService();
+    }
     @Test
-    public void test_MovieService() {
+    public static void test_MovieService() {
         MovieService test = new MovieService();
         Movie test_mov = new Movie().setId(0).setGenre("romance").setImdbRating(0.0).setImdbVotes(1000).setPlot("A basic Story").setReleased(new Date()).setTitle("Star Wars");
         Actor test_act = new Actor().setId(1).setName("Keanu Reeves");
