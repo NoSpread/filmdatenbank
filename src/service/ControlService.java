@@ -1,10 +1,14 @@
 package service;
 
-import model.*;
+import model.Actor;
+import model.Movie;
 
 import java.util.List;
 
-import static utility.Parameters.*;
+import static utility.Parameters.ACTORNETWORK;
+import static utility.Parameters.ACTORSEARCH;
+import static utility.Parameters.MOVIENETWORK;
+import static utility.Parameters.MOVIESEARCH;
 
 public class ControlService {
     private MovieService movieService;
