@@ -18,22 +18,6 @@ public class MovieService {
         this.directors = new ArrayList<>();
     }
 
-    /*
-    - getMovie by Id
-    - getMovie by Title
-    - getMovie series if exists
-
-    // network
-    - getMovies by Actor
-    - getActor by Movies
-    - getActor by Id
-
-    -> get all actors in movie, get all movies every actor took part in
-    -> get all movies actor played a role in, get all actors in those movies
-    // actors
-    - getActor by Name (first + last)
-     */
-
     public Movie getMovieById(int id) {
         for (Movie inListMovie : this.movies) {
             if (inListMovie.getId() == id) {
@@ -53,18 +37,15 @@ public class MovieService {
     }
 
     public void getActorByName(String name) {
-        // List<Actor> actorList = new ArrayList<>();
         for (Actor actor : this.actors) {
             if (actor.getName().toLowerCase().contains(name.toLowerCase())) {
                 System.out.println("NAME => " + actor.getName());
-                //System.out.println("actor.getMovies() = " + actor.getMovies());
                 for (int id : actor.getMovies()) {
                     Movie movie = getMovieById(id);
                     System.out.println("  MOVIE => " + movie.getTitle());
                 }
             }
         }
-        //return actorList;
     }
 
     public Director getDirectorById(int id) {
@@ -89,26 +70,18 @@ public class MovieService {
     public void addMovie(Movie movie) {
         if (!this.containsMovie(this.movies, 0, movie.getTitle())) {
             this.movies.add(movie);
-        } else {
-            //System.out.println("Did not add movie { " + movie.getTitle() + " }.");
         }
     }
 
-    public Actor addActor(Actor actor) {
+    public void addActor(Actor actor) {
         if (!this.containsActor(this.actors, 0, actor.getName())) {
             this.actors.add(actor);
-            return null;
-        } else {
-            //System.out.println("Did not add Actor { " + actor.getName() + " }.");
-            return actor;
         }
     }
 
     public void addDirector(Director director) {
         if (!this.containsDirector(this.directors, 0, director.getName())) {
             this.directors.add(director);
-        } else {
-            //System.out.println("Did not add director { " + director.getName() + " }.");
         }
     }
 
@@ -139,6 +112,5 @@ public class MovieService {
             return list.stream().anyMatch(o -> o.getName().toLowerCase().equals(stringValue.toLowerCase()));
         }
     }
-
 
 }

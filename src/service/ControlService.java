@@ -9,7 +9,7 @@ import static utility.Parameters.*;
 public class ControlService {
     private MovieService movieService;
 
-    public ControlService(String[] params, MovieService movieService) {
+    public ControlService(MovieService movieService) {
         this.movieService = movieService;
     }
 
