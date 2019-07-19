@@ -12,24 +12,24 @@ public class Movie {
     private Date released;
     private int imdbVotes;
     private double imdbRating;
-    private List<Integer> actors = new ArrayList<>();
-    private List<Integer> directors = new ArrayList<>();
+    private List<Actor> actors = new ArrayList<>();
+    private List<Director> directors = new ArrayList<>();
 
     //region Getter/Setter
-    public List<Integer> getActors() {
+    public List<Actor> getActors() {
         return actors;
     }
 
-    public Movie setActors(List<Integer> actors) {
+    public Movie setActors(List<Actor> actors) {
         this.actors = actors;
         return this;
     }
 
-    public List<Integer> getDirectors() {
+    public List<Director> getDirectors() {
         return directors;
     }
 
-    public Movie setDirectors(List<Integer> directors) {
+    public Movie setDirectors(List<Director> directors) {
         this.directors = directors;
         return this;
     }

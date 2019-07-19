@@ -5,7 +5,10 @@ import model.Movie;
 import model.Director;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class MovieService {
     private List<Movie> movies;
@@ -31,7 +34,9 @@ public class MovieService {
     public void getMovieByTitle(String title) {
         for (Movie inListMovie : this.movies) {
             if (inListMovie.getTitle().toLowerCase().contains(title.toLowerCase())) {
-                System.out.println("TITLE => " + inListMovie.getTitle());
+                String[] movtitlearr = inListMovie.getTitle().split(", ");
+                String movtitle = movtitlearr.length == 2 ? movtitlearr[1] + " " + movtitlearr[0] : inListMovie.getTitle();
+                System.out.printf("TITLE => %s\n PLOT => %s\n GENRE => %s\n RELEASE => %s\n IMDB: \n  RATING => %.2f\n  VOTES => %d\n DIRECTORS => %s\n ACTORS => %s\n ID => %d\n", movtitle , inListMovie.getPlot(), inListMovie.getGenre(), inListMovie.getReleased(), inListMovie.getImdbRating(), inListMovie.getImdbVotes(), inListMovie.getDirectors().stream().map(Director::getName).collect(Collectors.toList()), inListMovie.getActors().stream().map(Actor::getName).collect(Collectors.toList()) ,inListMovie.getId());
             }
         }
     }
@@ -39,9 +44,8 @@ public class MovieService {
     public void getActorByName(String name) {
         for (Actor actor : this.actors) {
             if (actor.getName().toLowerCase().contains(name.toLowerCase())) {
-                System.out.println("NAME => " + actor.getName());
-                for (int id : actor.getMovies()) {
-                    Movie movie = getMovieById(id);
+                System.out.println("NAME => " + actor.getName() + "ID => " + actor.getId());
+                for (Movie movie : actor.getMovies()) {
                     System.out.println("  MOVIE => " + movie.getTitle());
                 }
             }

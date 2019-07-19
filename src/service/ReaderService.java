@@ -24,6 +24,7 @@ public class ReaderService {
         this.movieService = movieService;
     }
 
+    // read database file
     public BufferedReader readFile() {
         try {
             File dbFile = new File("src/data.db");
@@ -35,6 +36,7 @@ public class ReaderService {
         }
     }
 
+    //split database into sections and put them into a hashmap
     public void getData(BufferedReader bufferedReader) {
         Map<String, List<String>> dataSet = new HashMap<>();
         String prevLine = null;
@@ -60,6 +62,7 @@ public class ReaderService {
         this.parseData(dataSet);
     }
 
+    //parse the data we read from the database
     private void parseData(Map<String, List<String>> listHashMap) {
 
         List<String> actorList = listHashMap.get(ACTOR_STOP);
@@ -68,6 +71,9 @@ public class ReaderService {
         List<String> actorMovieList = listHashMap.get(ACTOR_MOVIE_STOP);
         List<String> directorMovieList = listHashMap.get(DIRECTOR_MOVIE_STOP);
 
+        /*
+         * Prepare all threads for multi-threading (faster parsing)
+         */
         Thread t1 = new Thread(new RunnableThread(this, actorList) {
             @Override
             public void run() {
@@ -103,6 +109,7 @@ public class ReaderService {
             }
         });
 
+        // parse movies, actors and directors first
         t1.start();
         t2.start();
         t3.start();
@@ -197,8 +204,8 @@ public class ReaderService {
                     if (actorById == null || movieById == null) {
                         continue;
                     }
-                    actorById.getMovies().add(movieById.getId());
-                    movieById.getActors().add(actorById.getId());
+                    actorById.getMovies().add(movieById);
+                    movieById.getActors().add(actorById);
                 }
             }
 
@@ -217,8 +224,8 @@ public class ReaderService {
                     if (directorById == null || movieById == null) {
                         continue;
                     }
-                    directorById.getMovies().add(movieById.getId());
-                    movieById.getDirectors().add(directorById.getId());
+                    directorById.getMovies().add(movieById);
+                    movieById.getDirectors().add(directorById);
                 }
             }
         }

@@ -6,7 +6,7 @@ import java.util.List;
 public class Director {
     private int id;
     private String name;
-    private List<Integer> movies = new ArrayList<>();
+    private List<Movie> movies = new ArrayList<>();
 
     // region Getter/Setter
     public int getId() {
@@ -27,11 +27,11 @@ public class Director {
         return this;
     }
 
-    public List<Integer> getMovies() {
+    public List<Movie> getMovies() {
         return movies;
     }
 
-    public Director setMovies(List<Integer> movies) {
+    public Director setMovies(List<Movie> movies) {
         this.movies = movies;
         return this;
     }

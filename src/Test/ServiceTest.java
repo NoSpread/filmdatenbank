@@ -5,17 +5,25 @@ import model.Director;
 import model.Movie;
 import org.junit.jupiter.api.Test;
 import service.MovieService;
+import service.ReaderService;
 
+import java.io.BufferedReader;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class JUnitTest {
-    public static void main(String[] args) {
-        test_MovieService();
-    }
+class ServiceTest {
+
     @Test
-    public static void test_MovieService() {
+    void readService() {
+        MovieService test = new MovieService();
+        ReaderService readerService = new ReaderService(test);
+        BufferedReader bufferedReader = readerService.readFile();
+        readerService.getData(bufferedReader);
+    }
+
+    @Test
+    void modelTest() {
         MovieService test = new MovieService();
         Movie test_mov = new Movie().setId(0).setGenre("romance").setImdbRating(0.0).setImdbVotes(1000).setPlot("A basic Story").setReleased(new Date()).setTitle("Star Wars");
         Actor test_act = new Actor().setId(1).setName("Keanu Reeves");

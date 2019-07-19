@@ -6,7 +6,7 @@ import java.util.List;
 public class Actor {
     private int id;
     private String name;
-    private List<Integer> movies = new ArrayList<>();
+    private List<Movie> movies = new ArrayList<>();
 
     // region Getter/Setter
     public int getId() {
@@ -22,7 +22,7 @@ public class Actor {
         return name;
     }
 
-    public List<Integer> getMovies() {
+    public List<Movie> getMovies() {
         return movies;
     }
 

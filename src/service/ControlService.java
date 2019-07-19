@@ -34,7 +34,7 @@ public class ControlService {
             this.checkParameter(params[0]);
         } else {
             // no arguments, exit
-            System.out.println("You did not pass any agruments. Program will exit now!");
+            System.out.println("You did not pass any arguments. Program will exit now!");
             System.exit(1);
         }
     }
@@ -59,13 +59,11 @@ public class ControlService {
                 case ACTORNETWORK: // expects a int as data
                     int dat = this.checkForIntData(splitAtEquals[1], param);
                     Actor actor = this.movieService.getActorById(dat);
-                    List<Integer> movieid = actor.getMovies();
-                    for (int id : movieid) {
-                        Movie movie = this.movieService.getMovieById(id);
-                        System.out.println("Movie => " + movie.getTitle());
-                        List<Integer> actorid = movie.getActors();
-                        for(int x : actorid) {
-                            Actor subActor = this.movieService.getActorById(x);
+                    for (Movie movie : actor.getMovies()) {
+                        String[] movtitlearr = movie.getTitle().split(", ");
+                        String movtitle = movtitlearr.length == 2 ? movtitlearr[1] + " " + movtitlearr[0] : movie.getTitle();
+                        System.out.println("Movie => " + movtitle);
+                        for(Actor subActor : movie.getActors()) {
                             System.out.println("  Actor => " + subActor.getName());
                         }
                     }
@@ -73,14 +71,12 @@ public class ControlService {
                 case MOVIENETWORK: // expects a int as data
                     int data = this.checkForIntData(splitAtEquals[1], param);
                     Movie movie = this.movieService.getMovieById(data);
-                    List<Integer> actor_id = movie.getActors();
-                    for (int act_id : actor_id) {
-                        Actor act = this.movieService.getActorById(act_id);
+                    for (Actor act : movie.getActors()) {
                         System.out.println("Actor => " + act.getName());
-                        List<Integer> movie_id = act.getMovies();
-                        for (int y : movie_id) {
-                            Movie subMovie = this.movieService.getMovieById(y);
-                            System.out.println("  Movie => " + subMovie.getTitle());
+                        for (Movie subMovie : act.getMovies()) {
+                            String[] movtitlearr = subMovie.getTitle().split(", ");
+                            String movtitle = movtitlearr.length == 2 ? movtitlearr[1] + " " + movtitlearr[0] : subMovie.getTitle();
+                            System.out.println("  Movie => " + movtitle);
                         }
                     }
                     break;
@@ -110,7 +106,7 @@ public class ControlService {
     }
 
     private void damagedParameter(String param) {
-        System.out.println("The passed parameter: " + param + " could not be read by the program.");
+        System.out.println("\nThe passed parameter: " + param + " could not be read by the program.");
         System.out.println("Exiting now ...");
         System.exit(1);
     }
