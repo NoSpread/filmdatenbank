@@ -71,6 +71,7 @@ public class ReaderService {
         List<String> actorMovieList = listHashMap.get(ACTOR_MOVIE_STOP);
         List<String> directorMovieList = listHashMap.get(DIRECTOR_MOVIE_STOP);
 
+        // region threading
         /*
          * Prepare all threads for multi-threading (faster parsing)
          */
@@ -131,6 +132,7 @@ public class ReaderService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        // endregion
     }
 
 

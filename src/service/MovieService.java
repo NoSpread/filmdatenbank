@@ -1,14 +1,11 @@
 package service;
 
 import model.Actor;
-import model.Movie;
 import model.Director;
+import model.Movie;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class MovieService {
     private List<Movie> movies;
@@ -31,25 +28,19 @@ public class MovieService {
         return null;
     }
 
-    public void getMovieByTitle(String title) {
-        for (Movie inListMovie : this.movies) {
-            if (inListMovie.getTitle().toLowerCase().contains(title.toLowerCase())) {
-                String[] movtitlearr = inListMovie.getTitle().split(", ");
-                String movtitle = movtitlearr.length == 2 ? movtitlearr[1] + " " + movtitlearr[0] : inListMovie.getTitle();
-                System.out.printf("TITLE => %s\n PLOT => %s\n GENRE => %s\n RELEASE => %s\n IMDB: \n  RATING => %.2f\n  VOTES => %d\n DIRECTORS => %s\n ACTORS => %s\n ID => %d\n", movtitle , inListMovie.getPlot(), inListMovie.getGenre(), inListMovie.getReleased(), inListMovie.getImdbRating(), inListMovie.getImdbVotes(), inListMovie.getDirectors().stream().map(Director::getName).collect(Collectors.toList()), inListMovie.getActors().stream().map(Actor::getName).collect(Collectors.toList()) ,inListMovie.getId());
-            }
-        }
+    List<Movie> getMovieByTitle(String title) {
+        List<Movie> movieList = new ArrayList<>();
+        for (Movie movie : this.movies)
+            if (movie.getTitle().toLowerCase().contains(title.toLowerCase())) movieList.add(movie);
+
+        return movieList;
     }
 
-    public void getActorByName(String name) {
-        for (Actor actor : this.actors) {
-            if (actor.getName().toLowerCase().contains(name.toLowerCase())) {
-                System.out.println("NAME => " + actor.getName() + "ID => " + actor.getId());
-                for (Movie movie : actor.getMovies()) {
-                    System.out.println("  MOVIE => " + movie.getTitle());
-                }
-            }
-        }
+    List<Actor> getActorByName(String name) {
+        List<Actor> actorList = new ArrayList<>();
+        for (Actor actor : this.actors)
+            if (actor.getName().toLowerCase().contains(name.toLowerCase())) actorList.add(actor);
+        return actorList;
     }
 
     public Director getDirectorById(int id) {

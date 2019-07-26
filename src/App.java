@@ -16,7 +16,7 @@ public class App {
 
         controlService.parseParams(params);
 
-        System.out.println("Passed params:");
+        System.out.println("\nPassed params:");
         for (int i = 0; i < params.length; i++) {
             System.out.println("Parameter " + i + ": " + params[i]);
         }

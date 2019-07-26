@@ -15,14 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class ServiceTest {
 
     @Test
-    void readService() {
-        MovieService test = new MovieService();
-        ReaderService readerService = new ReaderService(test);
-        BufferedReader bufferedReader = readerService.readFile();
-        readerService.getData(bufferedReader);
-    }
-
-    @Test
     void modelTest() {
         MovieService test = new MovieService();
         Movie test_mov = new Movie().setId(0).setGenre("romance").setImdbRating(0.0).setImdbVotes(1000).setPlot("A basic Story").setReleased(new Date()).setTitle("Star Wars");

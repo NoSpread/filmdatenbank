@@ -1,14 +1,13 @@
 package service;
 
 import model.Actor;
+import model.Director;
 import model.Movie;
+import utility.Parameters;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static utility.Parameters.ACTORNETWORK;
-import static utility.Parameters.ACTORSEARCH;
-import static utility.Parameters.MOVIENETWORK;
-import static utility.Parameters.MOVIESEARCH;
+import java.util.stream.Collectors;
 
 public class ControlService {
     private MovieService movieService;
@@ -50,29 +49,43 @@ public class ControlService {
             // and the second should contain the data passed to the program
             // Now check if we understand the command
             switch (splitAtEquals[0]) {
-                case MOVIESEARCH: // expects a string as data
-                    this.movieService.getMovieByTitle(this.checkForStringData(splitAtEquals[1], param));
+                case Parameters.MOVIESEARCH: // expects a string as data
+                    List<Movie> movies = this.movieService.getMovieByTitle(this.checkForStringData(splitAtEquals[1], param));
+                    for (Movie movie : movies){
+                        String[] movtitlearr = movie.getTitle().split(", ");
+                        String movtitle = movtitlearr.length == 2 ? movtitlearr[1] + " " + movtitlearr[0] : movie.getTitle();
+                        System.out.printf("\nTITLE => %s\n PLOT => %s\n GENRE => %s\n RELEASE => %s\n IMDB: \n  RATING => %.2f\n  VOTES => %d\n DIRECTORS => %s\n ACTORS => %s\n ID => %d\n", movtitle , movie.getPlot(), movie.getGenre(), movie.getReleased(), movie.getImdbRating(), movie.getImdbVotes(), movie.getDirectors().stream().map(Director::getName).collect(Collectors.toList()), movie.getActors().stream().map(Actor::getName).collect(Collectors.toList()) ,movie.getId());
+                    }
                     break;
-                case ACTORSEARCH: // expects a string as data
-                    this.movieService.getActorByName(this.checkForStringData(splitAtEquals[1], param));
+                case Parameters.ACTORSEARCH: // expects a string as data
+                    List<Actor> actors = this.movieService.getActorByName(this.checkForStringData(splitAtEquals[1],param));
+                    for (Actor actor : actors) {
+                        List<String> movieNames = new ArrayList<>();
+                        for (Movie movie : actor.getMovies()){
+                            String[] movtitlearr = movie.getTitle().split(", ");
+                            movieNames.add(movtitlearr.length == 2 ? movtitlearr[1] + " " + movtitlearr[0] : movie.getTitle());
+                        }
+                        System.out.printf("\nNAME => %s\n ID => %d\n MOVIES => %s\n", actor.getName(), actor.getId(),  movieNames);
+                    }
+
                     break;
-                case ACTORNETWORK: // expects a int as data
+                case Parameters.ACTORNETWORK: // expects a int as data
                     int dat = this.checkForIntData(splitAtEquals[1], param);
                     Actor actor = this.movieService.getActorById(dat);
                     for (Movie movie : actor.getMovies()) {
                         String[] movtitlearr = movie.getTitle().split(", ");
                         String movtitle = movtitlearr.length == 2 ? movtitlearr[1] + " " + movtitlearr[0] : movie.getTitle();
-                        System.out.println("Movie => " + movtitle);
+                        System.out.println("\nMovie => " + movtitle);
                         for(Actor subActor : movie.getActors()) {
                             System.out.println("  Actor => " + subActor.getName());
                         }
                     }
                     break;
-                case MOVIENETWORK: // expects a int as data
+                case Parameters.MOVIENETWORK: // expects a int as data
                     int data = this.checkForIntData(splitAtEquals[1], param);
                     Movie movie = this.movieService.getMovieById(data);
                     for (Actor act : movie.getActors()) {
-                        System.out.println("Actor => " + act.getName());
+                        System.out.println("\nActor => " + act.getName());
                         for (Movie subMovie : act.getMovies()) {
                             String[] movtitlearr = subMovie.getTitle().split(", ");
                             String movtitle = movtitlearr.length == 2 ? movtitlearr[1] + " " + movtitlearr[0] : subMovie.getTitle();
